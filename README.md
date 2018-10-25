@@ -267,3 +267,21 @@ Please note that this extracts the percentage out of a monetary value where the
 percentage is already included. If you want to get the percentage of the
 monetary value you should use multiplication (`multiply(0.21)`, for instance,
 to calculate 21% of a monetary value represented by a Money object) instead.
+
+
+$ git filter-branch --env-filter '
+WRONG_EMAIL="wrong@example.com"
+NEW_NAME="New Name Value"
+NEW_EMAIL="correct@example.com"
+
+if [ "$GIT_COMMITTER_EMAIL" = "$WRONG_EMAIL" ]
+then
+    export GIT_COMMITTER_NAME="$NEW_NAME"
+    export GIT_COMMITTER_EMAIL="$NEW_EMAIL"
+fi
+if [ "$GIT_AUTHOR_EMAIL" = "$WRONG_EMAIL" ]
+then
+    export GIT_AUTHOR_NAME="$NEW_NAME"
+    export GIT_AUTHOR_EMAIL="$NEW_EMAIL"
+fi
+' --tag-name-filter cat -- --branches --tags
